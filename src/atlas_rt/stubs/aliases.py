@@ -1,49 +1,71 @@
 Mapping = {
-    # San Francisco
-    "san francisco": "SFO",
-    "sf": "SFO",
-    "sfo": "SFO",
+    # ─── Cities & IATA codes ───
+    # USA
+    "san francisco": ["SFO"], "sf": ["SFO"], "sfo": ["SFO"],
+    "los angeles": ["LAX"], "la": ["LAX"], "lax": ["LAX"],
+    "new york": ["JFK"], "new york city": ["JFK"], "nyc": ["JFK"], "ny": ["JFK"], "jfk": ["JFK"],
 
-    # Los Angeles
-    "los angeles": "LAX",
-    "la": "LAX",
-    "lax": "LAX",
+    # Japan
+    "tokyo": ["HND"], "hnd": ["HND"], "haneda": ["HND"],
 
-    # New York
-    "new york": "JFK",
-    "new york city": "JFK",
-    "nyc": "JFK",
-    "ny": "JFK",
-    "jfk": "JFK",
+    # India
+    "hyderabad": ["HYD"], "hyd": ["HYD"],
+    "mumbai": ["BOM"], "bombay": ["BOM"], "bom": ["BOM"],
 
-    # Tokyo
-    "tokyo": "HND",
-    "hnd": "HND",
-    "haneda": "HND",
+    # France
+    "paris": ["CDG"], "cdg": ["CDG"],
 
-    # Hyderabad
-    "hyderabad": "HYD",
-    "hyd": "HYD",
+    # Thailand
+    "bangkok": ["BKK"], "bkk": ["BKK"],
 
-    # Mumbai
-    "mumbai": "BOM",
-    "bombay": "BOM",
-    "bom": "BOM",
+    # Germany
+    "hamburg": ["HAM"], "ham": ["HAM"],
+    "frankfurt": ["FRA"], "fra": ["FRA"], "frankfurt am main": ["FRA"],
 
-    # Paris
-    "paris": "CDG",
-    "cdg": "CDG",
+    # Italy
+    "rome": ["FCO"], "fco": ["FCO"],
 
-    # Bangkok
-    "bangkok": "BKK",
-    "bkk": "BKK",
+    # Spain
+    "madrid": ["MAD"], "mad": ["MAD"],
 
-    # Hamburg
-    "hamburg": "HAM",
-    "ham": "HAM",
+    # UK
+    "london": ["LHR"], "lhr": ["LHR"],
 
-    # Frankfurt
-    "frankfurt": "FRA",
-    "fra": "FRA",
-    "frankfurt am main": "FRA",
+    # Brazil
+    "sao paulo": ["GRU"], "são paulo": ["GRU"], "gru": ["GRU"],
+
+    # Mexico
+    "mexico city": ["MEX"], "mex": ["MEX"], "cdmx": ["MEX"],
+
+    # Australia
+    "sydney": ["SYD"], "syd": ["SYD"],
+
+    # Egypt
+    "cairo": ["CAI"], "cai": ["CAI"],
+
+    # Greece
+    "athens": ["ATH"], "ath": ["ATH"],
+
+    # Vietnam
+    "ho chi minh city": ["SGN"], "saigon": ["SGN"], "sgn": ["SGN"],
+
+    # Portugal
+    "lisbon": ["LIS"], "lis": ["LIS"],
+
+    # ─── Countries ───
+    "japan": ["HND"],
+    "india": ["BOM", "HYD"],
+    "france": ["CDG"],
+    "thailand": ["BKK"],
+    "germany": ["FRA", "HAM"],
+    "italy": ["FCO"],
+    "spain": ["MAD"],
+    "uk": ["LHR"], "united kingdom": ["LHR"], "britain": ["LHR"], "england": ["LHR"],
+    "brazil": ["GRU"],
+    "mexico": ["MEX"],
+    "australia": ["SYD"],
+    "egypt": ["CAI"],
+    "greece": ["ATH"],
+    "vietnam": ["SGN"],
+    "portugal": ["LIS"],
 }
