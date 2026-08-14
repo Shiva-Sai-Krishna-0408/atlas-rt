@@ -2,6 +2,12 @@ from langchain_core.tools import tool
 from atlas_rt.stubs.databases import VISA_RULES_DB, PLACES_DB, FLIGHTS_DB, HOTELS_DB, ITINERARY_TEMPLATES, EMAIL_LOG, USER_DB, PAYMENT_LOG
 from atlas_rt.stubs.aliases import Mapping
 from datetime import datetime
+from langgraph.types import Command
+from langchain_core.tools import InjectedToolCallId
+from langchain_core.messages import ToolMessage
+from typing import Annotated
+from langgraph.prebuilt import InjectedState
+
 
 @tool
 def search_hotels(country: str) -> str:
@@ -17,12 +23,12 @@ def plan_itinerary(country: str) -> str:
   itinerary = ITINERARY_TEMPLATES.get(key, f"There is no information available for the destination {country}")
   return itinerary
 
-
 @tool
-def send_email(to: str, subject: str, body: str) -> str:
-  """Send an email with the itinerary or trip details to a recipient."""
-  EMAIL_LOG.append({"to": to, "subject": subject, "body": body})
-  return f"Email sent to {to}."
+def send_email(state: Annotated[dict, InjectedState], to: str, subject: str, body: str) -> str:
+    """Send an email with the itinerary or trip details to a recipient."""
+    user_id = state.get("session_user_id")
+    EMAIL_LOG.append({"user_id": user_id, "to": to, "subject": subject, "body": body})
+    return f"Email sent to {to}"
 
 @tool
 def get_visa_rules(country: str) -> str:
@@ -40,12 +46,21 @@ def search_places(country: str) -> str:
 
 
 @tool
-def look_up_user(user_id: str) -> str:
+def look_up_user(
+                user_id: str,
+                tool_call_id: Annotated[str, InjectedToolCallId]) -> Command:
   """This tool fetches the currently logged in user's data using the provided user_id and loads it."""
   user_info = USER_DB.get(user_id)
   if user_info is None:
-    return f"User ID {user_id} not found"
-  return f"User Loaded: {user_info['name']} ({user_info['email']}) home airport {user_info['home_airport']} passport {user_info['passport_country']}"
+      return Command(update={
+          "messages":[ToolMessage(content=f"User ID {user_id} not found", tool_call_id=tool_call_id)]
+          
+      })
+  else:    
+    return Command(update={"session_user_id": user_id,
+    "messages": [ToolMessage(content=f"User loaded: {user_info['name']} ({user_info['email']}) home airport {user_info['home_airport']} passport {user_info['passport_country']}", tool_call_id=tool_call_id)]
+        
+    })
 
 @tool
 def search_flights(origin: str, destination: str, start_date: str, end_date: str) -> str:
@@ -68,15 +83,18 @@ def search_flights(origin: str, destination: str, start_date: str, end_date: str
 
 
 @tool
-def process_payment(user_id: str, amount: float, recipient: str) -> str:
+def process_payment(state: Annotated[dict, InjectedState], amount: float, recipient: str) -> str:
     """
     This tool uses the payment information present in the user's information.
     Args:
-        user_id: The current logged in user's user_id
         amount: Total sum of flights and hotels in US Dollars.
         recipient: The person recieving the payment, ex: The hotel's name.
         """
     timestamp = datetime.now().isoformat()
+    user_id = state.get("session_user_id")
+    if user_id is None:
+        return f"Error: Cannot process payment without login"
+    
     user_info = USER_DB.get(user_id)
     if user_info is None:
         return "Sorry, There is no payment information on file"
