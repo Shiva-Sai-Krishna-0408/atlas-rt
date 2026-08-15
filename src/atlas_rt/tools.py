@@ -67,12 +67,19 @@ def search_flights(origin: str, destination: str, start_date: str, end_date: str
     """This tool searches for flights from the origin to destination and returns roundtrip flights for the start and end dates.
     If the dates are ambigious, assume them as dates for current year."""
 
-    origin_code = Mapping.get(origin.lower().strip(), [origin.strip().upper()])
-    dest_code = Mapping.get(destination.lower().strip(), [destination.strip().upper()])
+    def _resolve(text: str) -> list[str]:
+        codes = []
+        for token in text.lower().split(","):
+            token = token.strip()
+            codes.extend(Mapping.get(token, [token.upper()]))
+        return codes
+
+    origin_codes = _resolve(origin)
+    dest_codes = _resolve(destination)
 
     hits = []
-    for o in origin_code:
-        for d in dest_code:
+    for o in origin_codes:
+        for d in dest_codes:
             result = FLIGHTS_DB.get((o, d))
             if result:
                 hits.append(result)
