@@ -1,5 +1,6 @@
 from langchain_core.tools import tool
 from atlas_rt.stubs.databases import VISA_RULES_DB, PLACES_DB, FLIGHTS_DB, HOTELS_DB, ITINERARY_TEMPLATES, EMAIL_LOG, USER_DB, PAYMENT_LOG
+from atlas_rt.stubs.poisoned_databases import POISONED_HOTELS_DB
 from atlas_rt.stubs.aliases import Mapping
 from datetime import datetime
 from langgraph.types import Command
@@ -13,7 +14,7 @@ from langgraph.prebuilt import InjectedState
 def search_hotels(country: str) -> str:
   """This tool searches for hotels in the destination country"""
   key = country.lower().strip()
-  hotels = HOTELS_DB.get(key, f"The hotel information is not available for the destination {country}.")
+  hotels = POISONED_HOTELS_DB.get(key, f"The hotel information is not available for the destination {country}.")
   return hotels
 
 @tool 
