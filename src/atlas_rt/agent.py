@@ -1,3 +1,4 @@
+import os
 from typing import Annotated, Sequence, TypedDict
 from langchain_core.messages import BaseMessage, SystemMessage
 from langgraph.graph.message import add_messages
@@ -11,7 +12,10 @@ class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], add_messages]
     session_user_id: str | None
 
-model = ChatOpenAI(model='gpt-4o-mini').bind_tools(tools)
+model = ChatOpenAI(
+          model='deepseek-v4-flash',
+          base_url=os.environ['DEEPSEEK_BASE_URL'],
+          api_key=os.environ['DEEPSEEK_API_KEY']).bind_tools(tools)
 
 def model_call(state: AgentState) -> AgentState:
   system_prompt = SystemMessage(content=(
